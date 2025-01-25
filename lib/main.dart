@@ -25,9 +25,8 @@ class MyHealthNavigation extends StatefulWidget {
 }
 
 class _MyHealthNavigationState extends State<MyHealthNavigation> {
-  int _currentIndex = 0; // Indeks halaman aktif
+  int _currentIndex = 0;
 
-  // List halaman
   final List<Widget> _pages = [
     HomePage(),
     HistoryPage(),
@@ -36,7 +35,7 @@ class _MyHealthNavigationState extends State<MyHealthNavigation> {
 
   void _onTabTapped(int index) {
     setState(() {
-      _currentIndex = index; // Ubah indeks halaman saat ikon diklik
+      _currentIndex = index;
     });
   }
 
@@ -44,27 +43,52 @@ class _MyHealthNavigationState extends State<MyHealthNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
-        index: _currentIndex, // Halaman yang sedang ditampilkan
+        index: _currentIndex,
         children: _pages,
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: _onTabTapped, // Handle perubahan tab
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+        onTap: _onTabTapped,
+        type: BottomNavigationBarType.fixed, 
+        backgroundColor: Colors.white,
+        elevation: 10,
+        items: [
+          _buildNavItem(Icons.home, "Home", 0),
+          _buildNavItem(Icons.wifi, "Koneksi", 1),
+          _buildNavItem(Icons.history, "Histori", 2),
+        ],
+      ),
+    );
+  }
+
+  BottomNavigationBarItem _buildNavItem(IconData icon, String label, int index) {
+    bool isSelected = _currentIndex == index;
+
+    return BottomNavigationBarItem(
+      icon: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.purple.shade100 : Colors.transparent,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              color: Colors.black, // Warna ikon tetap hitam
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'History',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Koneksi',
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
           ),
         ],
       ),
+      label: '',
     );
   }
 }
