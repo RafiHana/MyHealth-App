@@ -1,11 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart'; 
+import 'package:intl/date_symbol_data_local.dart'; 
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting('id_ID', null);
+    String currentDate = DateFormat('EEEE, dd MMMM', 'id_ID').format(DateTime.now());
+
+    String getGreeting() {
+      final hour = DateTime.now().hour;
+      if (hour >= 5 && hour < 10) {
+        return "Selamat Pagi";
+      } else if (hour >= 10 && hour < 14) {
+        return "Selamat Siang";
+      } else if (hour >= 14 && hour < 18) {
+        return "Selamat Sore";
+      } else {
+        return "Selamat Malam";
+      }
+    }
+
+    String greeting = getGreeting(); 
+
     return Scaffold(
-      backgroundColor: Color(0xFFE0F2FF), 
+      backgroundColor: Color(0xFFE0F2FF),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -22,7 +42,7 @@ class HomePage extends StatelessWidget {
               ),
               SizedBox(height: 4),
               Text(
-                "Hallo Selamat Pagi",
+                "Halo, $greeting", 
                 style: TextStyle(fontSize: 16, color: Colors.black87),
               ),
               SizedBox(height: 16),
@@ -47,7 +67,7 @@ class HomePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "01 Oktober, Senin",
+                          currentDate, 
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.grey[700],

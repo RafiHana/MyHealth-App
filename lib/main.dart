@@ -48,9 +48,9 @@ class _MyHealthNavigationState extends State<MyHealthNavigation> {
         children: _pages,
       ),
       bottomNavigationBar: SafeArea(
-        bottom: false, 
+        bottom: false,
         child: Container(
-          height: 70 + MediaQuery.of(context).viewPadding.bottom, 
+          height: 70 + MediaQuery.of(context).viewPadding.bottom,
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [
@@ -81,7 +81,8 @@ class _MyHealthNavigationState extends State<MyHealthNavigation> {
     );
   }
 
-  BottomNavigationBarItem _buildNavItem(String iconPath, String label, int index) {
+  BottomNavigationBarItem _buildNavItem(
+      String iconPath, String label, int index) {
     bool isSelected = _currentIndex == index;
     return BottomNavigationBarItem(
       icon: Container(
