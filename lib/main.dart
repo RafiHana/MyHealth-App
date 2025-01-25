@@ -1,5 +1,5 @@
-import 'package:esp_control/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'pages/splash_screen.dart';
 import 'pages/home_page.dart';
 import 'pages/history_page.dart';
 import 'pages/connection_page.dart';
@@ -13,11 +13,8 @@ class MyHealthApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'MyHealth',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      // home: MyHealthNavigation(),
-      home: SplashScreen(),
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: SplashScreen(), 
     );
   }
 }
