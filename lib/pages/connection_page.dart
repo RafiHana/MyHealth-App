@@ -39,10 +39,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
                   color: Colors.indigo.shade900,
                 ),
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 35),
 
               Container(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.symmetric(horizontal: 26, vertical: 24),
+                width: double.infinity, 
+                height: 100, 
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -57,7 +59,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                 child: Row(
                   children: [
                     SvgPicture.asset(
-                      'assets/icons/connection.svg', 
+                      'assets/icons/connection.svg',
                       height: 40,
                       width: 40,
                       color: Colors.indigo.shade900,
@@ -111,7 +113,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                 ),
               ),
 
-              SizedBox(height: 40),
+              SizedBox(height: 50),
 
               Center(
                 child: Column(
@@ -119,17 +121,16 @@ class _ConnectionPageState extends State<ConnectionPage> {
                     Text(
                       "Status koneksi",
                       style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: const Color.fromARGB(255, 0, 20, 201),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: const Color.fromARGB(255, 19, 19, 69),
                       ),
                     ),
-                    SizedBox(height: 10),
                     Text(
                       isConnected ? "TERHUBUNG" : "TERPUTUS",
                       style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 34,
+                        fontWeight: FontWeight.w800,
                         color: isConnected ? Colors.green : Colors.red,
                       ),
                     ),
@@ -141,7 +142,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.indigo.shade900,
+                        color: const Color.fromARGB(255, 0, 0, 0),
                       ),
                     ),
                     SizedBox(height: 20),
