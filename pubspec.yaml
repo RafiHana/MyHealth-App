@@ -25,3 +25,6 @@ flutter:
     - assets/icons/connection.svg
     - assets/icons/history.svg
     - assets/icons/my_health_icon.svg
+    - assets/icons/nav_home.svg
+    - assets/icons/nav_connection.svg
+    - assets/icons/nav_history.svg

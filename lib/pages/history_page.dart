@@ -14,7 +14,6 @@ class HistoryPage extends StatelessWidget {
                 style: TextStyle(fontSize: 14)),
             SizedBox(height: 10),
             ElevatedButton(onPressed: () {}, child: Text('Download Histori')),
-            // Tampilkan tabel atau grafik histori
           ],
         ),
       ),
