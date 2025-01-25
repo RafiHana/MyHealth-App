@@ -1,3 +1,4 @@
+import 'package:esp_control/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'pages/home_page.dart';
 import 'pages/history_page.dart';
@@ -15,7 +16,8 @@ class MyHealthApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHealthNavigation(),
+      // home: MyHealthNavigation(),
+      home: SplashScreen(),
     );
   }
 }
