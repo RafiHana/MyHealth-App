@@ -1,124 +1,151 @@
 import 'package:flutter/material.dart';
-import '../widgets/status_card.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('MyHealth'),
-        backgroundColor: Colors.blue,
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
+      backgroundColor: Color(0xFFE0F2FF), 
+      body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                "MyHealth",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.indigo.shade900,
+                ),
+              ),
+              SizedBox(height: 4),
+              Text(
+                "Hallo Selamat Pagi",
+                style: TextStyle(fontSize: 16, color: Colors.black87),
+              ),
+              SizedBox(height: 16),
+
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade100,
-                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "01 Oktober, Senin",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          "30°",
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.indigo.shade900,
+                          ),
+                        ),
+                      ],
+                    ),
                     Text(
-                      'Hallo Selamat Pagi',
+                      "Hari Yang\nCerah",
+                      textAlign: TextAlign.right,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade800,
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      'Udara di sekitarmu sedang baik, selamat beraktifitas',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.blueGrey,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      '01 Oktober, Senin',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.blueGrey,
+                        color: Colors.indigo.shade900,
                       ),
                     ),
                   ],
                 ),
               ),
+
               SizedBox(height: 20),
 
-              Text(
-                'Pantauan Udara',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+              Center(
+                child: Text(
+                  "Udara di sekitarmu sedang baik, selamat beraktifitas",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.indigo.shade900,
+                  ),
                 ),
               ),
-              SizedBox(height: 10),
-              // Status Card List
-              Column(
-                children: [
-                  StatusCard(
-                    title: "Karbon Dioksida",
-                    value: "500 ppm",
-                  ),
-                  StatusCard(
-                    title: "Asap",
-                    value: "500 µg/m³",
-                  ),
-                  StatusCard(
-                    title: "Kelembapan",
-                    value: "50%",
-                  ),
-                  StatusCard(
-                    title: "Suhu",
-                    value: "30°C",
-                  ),
-                ],
-              ),
+
               SizedBox(height: 20),
 
-              // Section Catatan atau Tips
-              Text(
-                'Tips Hari Ini',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.green.shade50,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
+              Flexible(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
                   children: [
-                    Icon(Icons.info_outline, color: Colors.green, size: 30),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'Minumlah cukup air hari ini dan hindari aktivitas berat saat cuaca panas.',
-                        style: TextStyle(fontSize: 14, color: Colors.green.shade800),
-                      ),
-                    ),
+                    buildInfoCard("Suhu", "30°C", "assets/icons/temp.svg"),
+                    buildInfoCard("Kelembapan", "50%", "assets/icons/humidity.svg"),
+                    buildInfoCard("Karbon Dioksida", "500 ppm", "assets/icons/co2.svg"),
+                    buildInfoCard("Asap", "500 µg/m³", "assets/icons/smoke.svg"),
+                    buildInfoCard("Koneksi", "", "assets/icons/connection.svg"),
+                    buildInfoCard("History", "", "assets/icons/history.svg"),
                   ],
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildInfoCard(String title, String value, String iconPath) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(iconPath, height: 40, color: Colors.white),
+          SizedBox(height: 10),
+          Text(
+            title,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          if (value.isNotEmpty)
+            SizedBox(height: 5),
+          if (value.isNotEmpty)
+            Text(
+              value,
+              style: TextStyle(fontSize: 14, color: Colors.white),
+            ),
+        ],
       ),
     );
   }

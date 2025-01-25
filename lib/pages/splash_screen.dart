@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _startAnimation() {
-    Future.delayed(Duration(milliseconds: 1500), () {
+    Future.delayed(Duration(milliseconds: 1000), () {
       if (mounted) {
         setState(() {
           _opacity = 0.0;
@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedContainer(
-        duration: Duration(milliseconds: 500),
+        duration: Duration(milliseconds: 1000),
         curve: Curves.easeInOut,
         transform: Matrix4.translationValues(0, _offsetY, 0),
         child: Opacity(

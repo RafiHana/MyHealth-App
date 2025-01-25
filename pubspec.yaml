@@ -17,6 +17,11 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
 flutter:
-  uses-material-design: true
   assets:
+    - assets/icons/temp.svg
+    - assets/icons/humidity.svg
+    - assets/icons/co2.svg
+    - assets/icons/smoke.svg
+    - assets/icons/connection.svg
+    - assets/icons/history.svg
     - assets/icons/my_health_icon.svg
