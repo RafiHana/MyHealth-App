@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart'; 
-import 'package:intl/date_symbol_data_local.dart'; 
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting('id_ID', null);
-    String currentDate = DateFormat('EEEE, dd MMMM', 'id_ID').format(DateTime.now());
+    String currentDate =
+        DateFormat('EEEE, dd MMMM', 'id_ID').format(DateTime.now());
 
     String getGreeting() {
       final hour = DateTime.now().hour;
@@ -22,7 +23,7 @@ class HomePage extends StatelessWidget {
       }
     }
 
-    String greeting = getGreeting(); 
+    String greeting = getGreeting();
 
     return Scaffold(
       backgroundColor: Color(0xFFE0F2FF),
@@ -42,11 +43,10 @@ class HomePage extends StatelessWidget {
               ),
               SizedBox(height: 4),
               Text(
-                "Halo, $greeting", 
+                "Halo, $greeting",
                 style: TextStyle(fontSize: 16, color: Colors.black87),
               ),
               SizedBox(height: 16),
-
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -67,7 +67,7 @@ class HomePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          currentDate, 
+                          currentDate,
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.grey[700],
@@ -96,9 +96,7 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
-
               SizedBox(height: 20),
-
               Center(
                 child: Text(
                   "Udara di sekitarmu sedang baik, selamat beraktifitas",
@@ -110,9 +108,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-
               SizedBox(height: 20),
-
               Flexible(
                 child: GridView.count(
                   crossAxisCount: 2,
@@ -120,9 +116,12 @@ class HomePage extends StatelessWidget {
                   mainAxisSpacing: 16,
                   children: [
                     buildInfoCard("Suhu", "30°C", "assets/icons/temp.svg"),
-                    buildInfoCard("Kelembapan", "50%", "assets/icons/humidity.svg"),
-                    buildInfoCard("Karbon Dioksida", "500 ppm", "assets/icons/co2.svg"),
-                    buildInfoCard("Asap", "500 µg/m³", "assets/icons/smoke.svg"),
+                    buildInfoCard(
+                        "Kelembapan", "50%", "assets/icons/humidity.svg"),
+                    buildInfoCard(
+                        "Karbon Dioksida", "500 ppm", "assets/icons/co2.svg"),
+                    buildInfoCard(
+                        "Asap", "500 µg/m³", "assets/icons/smoke.svg"),
                     buildInfoCard("Koneksi", "", "assets/icons/connection.svg"),
                     buildInfoCard("History", "", "assets/icons/history.svg"),
                   ],
@@ -156,10 +155,10 @@ class HomePage extends StatelessWidget {
           SizedBox(height: 10),
           Text(
             title,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
           ),
-          if (value.isNotEmpty)
-            SizedBox(height: 5),
+          if (value.isNotEmpty) SizedBox(height: 5),
           if (value.isNotEmpty)
             Text(
               value,

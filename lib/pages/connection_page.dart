@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; 
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ConnectionPage extends StatefulWidget {
   @override
@@ -16,7 +16,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
     setState(() {
       if (_macController.text.isNotEmpty) {
         isConnected = true;
-        macAddress = _macController.text; 
+        macAddress = _macController.text;
       }
     });
   }
@@ -40,11 +40,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
                 ),
               ),
               SizedBox(height: 35),
-
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 26, vertical: 24),
-                width: double.infinity, 
-                height: 100, 
+                width: double.infinity,
+                height: 100,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -78,9 +77,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                   ],
                 ),
               ),
-
               SizedBox(height: 20),
-
               Text(
                 "Masukkan di bawah ini",
                 style: TextStyle(fontSize: 16, color: Colors.black87),
@@ -94,13 +91,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
                 ),
               ),
               SizedBox(height: 20),
-
               ElevatedButton(
                 onPressed: connectToESP,
                 child: Text(
                   'Sambungkan',
                   style: TextStyle(
-                    color: Colors.white, 
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -112,9 +108,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                   ),
                 ),
               ),
-
               SizedBox(height: 50),
-
               Center(
                 child: Column(
                   children: [
@@ -146,7 +140,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
                       ),
                     ),
                     SizedBox(height: 20),
-
                     CircleAvatar(
                       radius: 30,
                       backgroundColor: isConnected ? Colors.green : Colors.red,
