@@ -6,7 +6,7 @@ class HistoryPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFE0F2FF),
       body: SafeArea(
-        child: SingleChildScrollView( // Tambahkan SingleChildScrollView di sini
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -38,23 +38,28 @@ class HistoryPage extends StatelessWidget {
                       children: [
                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text('Hari', style: TextStyle(fontWeight: FontWeight.bold)),
+                          child: Text('Hari',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text('Suhu', style: TextStyle(fontWeight: FontWeight.bold)),
+                          child: Text('Suhu',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text('Kelembapan', style: TextStyle(fontWeight: FontWeight.bold)),
+                          child: Text('Kelembapan',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text('Karbon Dioksida', style: TextStyle(fontWeight: FontWeight.bold)),
+                          child: Text('Karbon Dioksida',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text('Asap', style: TextStyle(fontWeight: FontWeight.bold)),
+                          child: Text('Asap',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),
@@ -127,7 +132,7 @@ class HistoryPage extends StatelessWidget {
             children: [
               Icon(Icons.circle, color: Colors.green, size: 12),
               const SizedBox(width: 4),
-              Text(hasData ? "50" : "0"), // Data jika ada atau tidak
+              Text(hasData ? "50" : "0"),
             ],
           ),
           const SizedBox(height: 8),
@@ -136,7 +141,7 @@ class HistoryPage extends StatelessWidget {
             children: [
               Icon(Icons.circle, color: Colors.red, size: 12),
               const SizedBox(width: 4),
-              Text(hasData ? "100" : "0"), // Data jika ada atau tidak
+              Text(hasData ? "100" : "0"),
             ],
           ),
         ],
