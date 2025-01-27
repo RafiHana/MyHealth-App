@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class HistoryPage extends StatelessWidget {
   @override
@@ -18,6 +21,15 @@ class HistoryPage extends StatelessWidget {
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.indigo.shade900,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  onPressed: () => _downloadPdf(context),
+                  icon: const Icon(Icons.download),
+                  label: const Text("Download History"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.indigo.shade900,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -147,5 +159,62 @@ class HistoryPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _downloadPdf(BuildContext context) async {
+    final pdf = pw.Document();
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Text(
+                "MyHealth History",
+                style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+              ),
+              pw.SizedBox(height: 16),
+              pw.Table(
+                border: pw.TableBorder.all(),
+                children: [
+                  pw.TableRow(
+                    children: [
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(8.0),
+                        child: pw.Text('Hari', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(8.0),
+                        child: pw.Text('Suhu', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(8.0),
+                        child: pw.Text('Kelembapan', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(8.0),
+                        child: pw.Text('Karbon Dioksida', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(8.0),
+                        child: pw.Text('Asap', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      ),
+                    ],
+                  ),
+                  ...[
+                    {'Hari': 'Senin', 'Suhu': '50', 'Kelembapan': '50', 'Karbon Dioksida': '100', 'Asap': '10'}
+                  ].map((data) {
+                    return pw.TableRow(children: data.values.map((val) => pw.Text(val)).toList());
+                  }).toList(),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+
+    await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf.save());
   }
 }
