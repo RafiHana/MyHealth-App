@@ -26,8 +26,17 @@ class HistoryPage extends StatelessWidget {
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
                   onPressed: () => _downloadPdf(context),
-                  icon: const Icon(Icons.download),
-                  label: const Text("Download History"),
+                  icon: const Icon(
+                    Icons.download,
+                    color: Color.fromARGB(255, 249, 249, 249),
+                  ),
+                  label: const Text(
+                    "Download History",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.indigo.shade900,
                   ),
@@ -49,27 +58,27 @@ class HistoryPage extends StatelessWidget {
                       decoration: BoxDecoration(),
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(1.0),
                           child: Text('Hari',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(1.0),
                           child: Text('Suhu',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(1.0),
                           child: Text('Kelembapan',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(1.0),
                           child: Text('Karbon Dioksida',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(1.0),
                           child: Text('Asap',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
@@ -172,7 +181,8 @@ class HistoryPage extends StatelessWidget {
             children: [
               pw.Text(
                 "MyHealth History",
-                style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+                style:
+                    pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
               ),
               pw.SizedBox(height: 16),
               pw.Table(
@@ -182,30 +192,48 @@ class HistoryPage extends StatelessWidget {
                     children: [
                       pw.Padding(
                         padding: const pw.EdgeInsets.all(8.0),
-                        child: pw.Text('Hari', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        child: pw.Text('Hari',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                       ),
                       pw.Padding(
                         padding: const pw.EdgeInsets.all(8.0),
-                        child: pw.Text('Suhu', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        child: pw.Text('Suhu',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                       ),
                       pw.Padding(
                         padding: const pw.EdgeInsets.all(8.0),
-                        child: pw.Text('Kelembapan', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        child: pw.Text('Kelembapan',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                       ),
                       pw.Padding(
                         padding: const pw.EdgeInsets.all(8.0),
-                        child: pw.Text('Karbon Dioksida', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        child: pw.Text('Karbon Dioksida',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                       ),
                       pw.Padding(
                         padding: const pw.EdgeInsets.all(8.0),
-                        child: pw.Text('Asap', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        child: pw.Text('Asap',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                       ),
                     ],
                   ),
                   ...[
-                    {'Hari': 'Senin', 'Suhu': '50', 'Kelembapan': '50', 'Karbon Dioksida': '100', 'Asap': '10'}
+                    {
+                      'Hari': 'Senin',
+                      'Suhu': '50',
+                      'Kelembapan': '50',
+                      'Karbon Dioksida': '100',
+                      'Asap': '10'
+                    }
                   ].map((data) {
-                    return pw.TableRow(children: data.values.map((val) => pw.Text(val)).toList());
+                    return pw.TableRow(
+                        children:
+                            data.values.map((val) => pw.Text(val)).toList());
                   }).toList(),
                 ],
               ),
@@ -215,6 +243,7 @@ class HistoryPage extends StatelessWidget {
       ),
     );
 
-    await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf.save());
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => pdf.save());
   }
 }
