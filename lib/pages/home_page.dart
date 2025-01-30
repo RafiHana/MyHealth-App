@@ -2,11 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:esp_control/backend/mqtt_client_handler.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late MqttClientHandler mqttClientHandler;
+  String temperature = '0°C';
+  String humidity = '0%';
+  String co2 = '0 ppm';
+  String smoke = '0 µg/m³';
+
+  @override
+  void initState() {
+    super.initState();
+    initializeDateFormatting('id_ID', null);
+    mqttClientHandler = MqttClientHandler();
+    mqttClientHandler.onTemperatureUpdate = (value) {
+      setState(() {
+        temperature = '$value°C';
+      });
+    };
+    mqttClientHandler.onHumidityUpdate = (value) {
+      setState(() {
+        humidity = '$value%';
+      });
+    };
+    mqttClientHandler.onCo2Update = (value) {
+      setState(() {
+        co2 = '$value ppm';
+      });
+    };
+    mqttClientHandler.onSmokeUpdate = (value) {
+      setState(() {
+        smoke = '$value µg/m³';
+      });
+    };
+    mqttClientHandler.connect();
+  }
+
+  @override
+  void dispose() {
+    mqttClientHandler.disconnect();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    initializeDateFormatting('id_ID', null);
     String currentDate =
         DateFormat('EEEE, dd MMMM', 'id_ID').format(DateTime.now());
 
@@ -75,7 +120,7 @@ class HomePage extends StatelessWidget {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          "30°",
+                          temperature,
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
@@ -115,13 +160,12 @@ class HomePage extends StatelessWidget {
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                   children: [
-                    buildInfoCard("Suhu", "30°C", "assets/icons/temp.svg"),
+                    buildInfoCard("Suhu", temperature, "assets/icons/temp.svg"),
                     buildInfoCard(
-                        "Kelembapan", "50%", "assets/icons/humidity.svg"),
+                        "Kelembapan", humidity, "assets/icons/humidity.svg"),
                     buildInfoCard(
-                        "Karbon Dioksida", "500 ppm", "assets/icons/co2.svg"),
-                    buildInfoCard(
-                        "Asap", "500 µg/m³", "assets/icons/smoke.svg"),
+                        "Karbon Dioksida", co2, "assets/icons/co2.svg"),
+                    buildInfoCard("Asap", smoke, "assets/icons/smoke.svg"),
                     buildInfoCard("Koneksi", "", "assets/icons/connection.svg"),
                     buildInfoCard("History", "", "assets/icons/history.svg"),
                   ],
