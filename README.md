@@ -1,26 +1,32 @@
 # MyHealth App
 
-MyHealth adalah aplikasi mobile berbasis Flutter yang membantu pengguna memantau kualitas udara lingkungan sekitar dengan menghubungkan perangkat IoT. Aplikasi ini dirancang untuk memberikan pengalaman pengguna yang intuitif dengan antarmuka yang bersih dan navigasi yang mudah.
+MyHealth adalah aplikasi mobile berbasis Flutter yang membantu pengguna memantau kualitas udara di lingkungan sekitar menggunakan perangkat IoT (ESP32 + Sensor). Aplikasi ini menggunakan MQTT untuk menerima data suhu, kelembapan, karbon dioksida (CO₂), dan asap secara real-time dari Firebase Realtime Database sebagai broker MQTT.
 
-## Fitur
+##
+🚀 Fitur
 
-- **Splash Screen**: Layar awal yang ditampilkan saat aplikasi dibuka.
-- **Home Page**: Halaman utama dengan tampilan indikator udara sekitar.
-- **Connection Page**: Memungkinkan pengguna untuk menghubungkan dan mengelola perangkat pemantauan IoT.
-- **History Page**: Menampilkan catatan dan data selama satu minggu.
-- **Custom Navigation Bar**: Navigasi bawah dengan latar belakang dinamis dan desain modern untuk akses cepat ke fitur utama.
+- **📊 Monitoring Real-time**: Data dari ESP32 diperbarui langsung di aplikasi.
+- **📡 MQTT dengan Firebase**: Menggunakan Firebase Realtime Database sebagai broker MQTT.
+- **🏠 Home Page**: Menampilkan kondisi udara saat ini secara visual dan informatif.
+- **🔗 Connection Page**: Memungkinkan pengguna menghubungkan perangkat IoT.
+- **📜 History Page**: Menampilkan riwayat data selama satu minggu.
+- **📍 Custom Navigation Bar**: Navigasi modern untuk pengalaman pengguna yang lebih baik.
 
-## Teknologi yang Digunakan
+##
+🛠 Teknologi yang Digunakan
 
-- **Flutter**: Framework lintas platform untuk membangun aplikasi yang dikompilasi secara native.
-- **Dart**: Bahasa pemrograman yang digunakan dengan Flutter.
-- **flutter_svg**: Untuk merender aset SVG yang digunakan di navigasi bawah.
+- **Flutter**: Framework utama untuk membangun aplikasi mobile.
+- **Dart**: Bahasa pemrograman yang digunakan dalam Flutter.
+- **Firebase Realtime Database**: Sebagai broker MQTT untuk komunikasi dengan ESP32.
+- **MQTT (mqtt_client)**: Protokol komunikasi yang digunakan untuk menerima data sensor.
+- **flutter_svg**: Untuk menampilkan ikon SVG di aplikasi.
 
-## Cara Menjalankan Aplikasi
+##
+📌 Cara Menjalankan Aplikasi
 
 1. **Clone Repository**:
    ```bash
-   git clone https://github.com/RafiHana/esp_control.git
+   git clone https://github.com/RafiHana/MyHealth-App.git
    ```
 
 2. **Masuk ke Direktori Proyek**:
@@ -66,7 +72,8 @@ flutter:
 - Jika Anda mengalami kesalahan `RenderFlex overflowed`, pastikan widget `SafeArea` digunakan dengan benar dalam `Scaffold`.
 - Selalu periksa bahwa aset SVG terhubung dengan benar di `pubspec.yaml`.
 
-## Kontributor
+#
+🤝 Kontributor
 
 - Rafi Hana - Developer
 
