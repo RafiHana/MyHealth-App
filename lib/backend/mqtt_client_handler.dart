@@ -4,7 +4,7 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 class MqttClientHandler {
   MqttServerClient? client;
   String broker = 'broker.emqx.io'; 
-  int port = 1883;
+  int port = 3306;
   String clientId = 'flutter_client';
   String temperatureTopic = 'suhu';
   String humidityTopic = 'kelembapan';
