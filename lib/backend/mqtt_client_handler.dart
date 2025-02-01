@@ -3,8 +3,8 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttClientHandler {
   MqttServerClient? client;
-  String broker = 'broker.emqx.io'; 
-  int port = 3306;
+  String broker = '192.168.1.100';
+  int port = 1883; 
   String clientId = 'flutter_client';
   String temperatureTopic = 'suhu';
   String humidityTopic = 'kelembapan';
@@ -36,7 +36,7 @@ class MqttClientHandler {
     }
 
     if (client!.connectionStatus!.state == MqttConnectionState.connected) {
-      print('Connected to MQTT broker');
+      print('Connected to MQTT broker at $broker');
       subscribeToTopics();
     } else {
       print('Failed to connect');
