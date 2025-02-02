@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:esp_control/backend/mqtt_client_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   final String brokerAddress;
@@ -24,16 +25,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    _loadBrokerAddress();
     initializeDateFormatting('id_ID', null);
-
     mqttClientHandler = MqttClientHandler(widget.brokerAddress);
-    
-    mqttClientHandler.onConnectionStatus = (status) {
-      setState(() {
-        isConnected = status;
-      });
-    };
-
     mqttClientHandler.onTemperatureUpdate = (value) {
       setState(() {
         temperature = '$value°C';
@@ -54,8 +48,16 @@ class _HomePageState extends State<HomePage> {
         smoke = '$value µg/m³';
       });
     };
-
     mqttClientHandler.connect();
+  }
+
+  void _loadBrokerAddress() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? savedBroker = prefs.getString('brokerAddress');
+    if (savedBroker != null) {
+      mqttClientHandler = MqttClientHandler(savedBroker);
+      mqttClientHandler.connect();
+    }
   }
 
   @override
@@ -66,6 +68,24 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    String currentDate =
+        DateFormat('EEEE, dd MMMM', 'id_ID').format(DateTime.now());
+
+    String getGreeting() {
+      final hour = DateTime.now().hour;
+      if (hour >= 5 && hour < 10) {
+        return "Selamat Pagi";
+      } else if (hour >= 10 && hour < 14) {
+        return "Selamat Siang";
+      } else if (hour >= 14 && hour < 18) {
+        return "Selamat Sore";
+      } else {
+        return "Selamat Malam";
+      }
+    }
+
+    String greeting = getGreeting();
+
     return Scaffold(
       backgroundColor: Color(0xFFE0F2FF),
       body: SafeArea(
@@ -84,18 +104,69 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: 4),
               Text(
-                "Status Koneksi: ${isConnected ? "TERHUBUNG" : "TERPUTUS"}",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: isConnected ? Colors.green : Colors.red,
-                ),
+                "Halo, $greeting",
+                style: TextStyle(fontSize: 16, color: Colors.black87),
               ),
               SizedBox(height: 16),
-              // Tambahkan indikator koneksi di UI
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          currentDate,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          temperature,
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.indigo.shade900,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      "Hari Yang\nCerah",
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.indigo.shade900,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
               Center(
-                child: CircleAvatar(
-                  radius: 30,
-                  backgroundColor: isConnected ? Colors.green : Colors.red,
+                child: Text(
+                  "Udara di sekitarmu sedang baik, selamat beraktifitas",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.indigo.shade900,
+                  ),
                 ),
               ),
               SizedBox(height: 20),
@@ -106,9 +177,13 @@ class _HomePageState extends State<HomePage> {
                   mainAxisSpacing: 16,
                   children: [
                     buildInfoCard("Suhu", temperature, "assets/icons/temp.svg"),
-                    buildInfoCard("Kelembapan", humidity, "assets/icons/humidity.svg"),
-                    buildInfoCard("Karbon Dioksida", co2, "assets/icons/co2.svg"),
+                    buildInfoCard(
+                        "Kelembapan", humidity, "assets/icons/humidity.svg"),
+                    buildInfoCard(
+                        "Karbon Dioksida", co2, "assets/icons/co2.svg"),
                     buildInfoCard("Asap", smoke, "assets/icons/smoke.svg"),
+                    buildInfoCard("Koneksi", "", "assets/icons/connection.svg"),
+                    buildInfoCard("History", "", "assets/icons/history.svg"),
                   ],
                 ),
               ),
@@ -118,7 +193,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
+
   Widget buildInfoCard(String title, String value, String iconPath) {
     return Container(
       padding: EdgeInsets.all(16),
@@ -153,3 +228,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}

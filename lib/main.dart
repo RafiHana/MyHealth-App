@@ -29,7 +29,7 @@ class _MyHealthNavigationState extends State<MyHealthNavigation> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    HomePage(),
+    HomePage(brokerAddress: ''), // Alamat broker akan diisi dari ConnectionPage
     ConnectionPage(),
     HistoryPage(),
   ];

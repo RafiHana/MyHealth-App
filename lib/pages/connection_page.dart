@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:esp_control/backend/mqtt_client_handler.dart';
+import 'package:mqtt_client/mqtt_client.dart';
+import 'home_page.dart';
+import 'package:esp_control/backend/mqtt_client_handler.dart'; 
 
 class ConnectionPage extends StatefulWidget {
   @override
@@ -8,31 +11,56 @@ class ConnectionPage extends StatefulWidget {
 }
 
 class _ConnectionPageState extends State<ConnectionPage> {
-  bool isConnected = false;
-  String ipAddress = ""; 
   final TextEditingController _ipController = TextEditingController();
-  final MqttClientHandler mqttHandler = MqttClientHandler();
+  late MqttClientHandler _mqttTester;
+  String _connectionStatus = "TERPUTUS";
+  bool _isConnecting = false;
 
   @override
   void initState() {
     super.initState();
-    mqttHandler.onConnectionStatusChange = (status) {
-      setState(() {
-        isConnected = status;
-      });
-    };
+    _mqttTester = MqttClientHandler('');
+    _loadSavedBroker();
   }
 
-  void connectToESP() async {
+  void _loadSavedBroker() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('brokerAddress', _macController.text);
+    String? savedBroker = prefs.getString('brokerAddress');
+    if (savedBroker != null) {
+      _ipController.text = savedBroker;
+    }
+  }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomePage(brokerAddress: _macController.text),
-      ),
-    );
+  Future<void> _testConnection() async {
+    if (_ipController.text.isEmpty) return;
+
+    setState(() {
+      _isConnecting = true;
+      _connectionStatus = "MENGHUBUNGKAN...";
+    });
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('brokerAddress', _ipController.text);
+
+      _mqttTester.broker = _ipController.text;
+      await _mqttTester.connect();
+      
+      setState(() {
+        _connectionStatus = "TERHUBUNG";
+      });
+      
+      await Future.delayed(Duration(seconds: 1));
+      _mqttTester.disconnect();
+    } catch (e) {
+      setState(() {
+        _connectionStatus = "TERPUTUS";
+      });
+    } finally {
+      setState(() {
+        _isConnecting = false;
+      });
+    }
   }
 
   @override
@@ -102,19 +130,25 @@ class _ConnectionPageState extends State<ConnectionPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Masukkan alamat IP ESP32',
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: () => _ipController.clear(),
+                  ),
                 ),
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: connectToESP,
-                child: Text(
-                  'Sambungkan',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                onPressed: _isConnecting ? null : _testConnection,
+                child: _isConnecting
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : Text(
+                        'Sambungkan',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 21, 29, 113),
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -123,43 +157,17 @@ class _ConnectionPageState extends State<ConnectionPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 20),
               Center(
-                child: Column(
-                  children: [
-                    Text(
-                      "Status koneksi",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: const Color.fromARGB(255, 19, 19, 69),
-                      ),
-                    ),
-                    Text(
-                      isConnected ? "TERHUBUNG" : "TERPUTUS",
-                      style: TextStyle(
-                        fontSize: 34,
-                        fontWeight: FontWeight.w800,
-                        color: isConnected ? Colors.green : Colors.red,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      isConnected
-                          ? "Aplikasi telah terkoneksi dengan ESP32\nIP: $ipAddress"
-                          : "Aplikasi belum terkoneksi dengan ESP32",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: const Color.fromARGB(255, 0, 0, 0),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundColor: isConnected ? Colors.green : Colors.red,
-                    ),
-                  ],
+                child: Text(
+                  _connectionStatus,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: _connectionStatus == "TERHUBUNG"
+                        ? Colors.green
+                        : Colors.red,
+                  ),
                 ),
               ),
             ],
@@ -167,5 +175,11 @@ class _ConnectionPageState extends State<ConnectionPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _mqttTester.disconnect();
+    super.dispose();
   }
 }
