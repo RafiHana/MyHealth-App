@@ -3,8 +3,8 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttClientHandler {
   MqttServerClient? client;
-  String broker = '192.168.1.100';
-  int port = 1883; 
+  String broker;
+  int port = 1883;
   String clientId = 'flutter_client';
   String temperatureTopic = 'suhu';
   String humidityTopic = 'kelembapan';
@@ -15,6 +15,9 @@ class MqttClientHandler {
   Function(String)? onHumidityUpdate;
   Function(String)? onCo2Update;
   Function(String)? onSmokeUpdate;
+  Function(bool)? onConnectionStatus;
+
+  MqttClientHandler(this.broker);
 
   Future<void> connect() async {
     client = MqttServerClient(broker, clientId);
@@ -33,16 +36,20 @@ class MqttClientHandler {
     } catch (e) {
       print('Exception: $e');
       client!.disconnect();
+      onConnectionStatus?.call(false);
+      return;
     }
 
     if (client!.connectionStatus!.state == MqttConnectionState.connected) {
       print('Connected to MQTT broker at $broker');
+      onConnectionStatus?.call(true);
       subscribeToTopics();
     } else {
       print('Failed to connect');
+      onConnectionStatus?.call(false);
     }
 
-    client!.updates!.listen((List<MqttReceivedMessage<MqttMessage>> c) {
+    client!.updates?.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
       final String payload =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
@@ -59,6 +66,11 @@ class MqttClientHandler {
     });
   }
 
+  void onDisconnected() {
+    print('Disconnected from MQTT broker');
+    onConnectionStatus?.call(false);
+  }
+
   void subscribeToTopics() {
     client!.subscribe(temperatureTopic, MqttQos.atLeastOnce);
     client!.subscribe(humidityTopic, MqttQos.atLeastOnce);
@@ -66,11 +78,7 @@ class MqttClientHandler {
     client!.subscribe(smokeTopic, MqttQos.atLeastOnce);
   }
 
-  void onDisconnected() {
-    print('Disconnected from MQTT broker');
-  }
-
   void disconnect() {
-    client!.disconnect();
+    client?.disconnect();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:esp_control/backend/mqtt_client_handler.dart';
 
 class ConnectionPage extends StatefulWidget {
   @override
@@ -8,17 +9,30 @@ class ConnectionPage extends StatefulWidget {
 
 class _ConnectionPageState extends State<ConnectionPage> {
   bool isConnected = false;
-  String macAddress = "";
+  String ipAddress = ""; 
+  final TextEditingController _ipController = TextEditingController();
+  final MqttClientHandler mqttHandler = MqttClientHandler();
 
-  final TextEditingController _macController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    mqttHandler.onConnectionStatusChange = (status) {
+      setState(() {
+        isConnected = status;
+      });
+    };
+  }
 
-  void connectToESP() {
-    setState(() {
-      if (_macController.text.isNotEmpty) {
-        isConnected = true;
-        macAddress = _macController.text;
-      }
-    });
+  void connectToESP() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('brokerAddress', _macController.text);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(brokerAddress: _macController.text),
+      ),
+    );
   }
 
   @override
@@ -84,11 +98,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
               ),
               SizedBox(height: 10),
               TextField(
-                controller: _macController,
+                controller: _ipController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: 'Masukkan alamat MAC ESP',
+                  hintText: 'Masukkan alamat IP ESP32',
                 ),
+                keyboardType: TextInputType.number,
               ),
               SizedBox(height: 20),
               ElevatedButton(
@@ -131,8 +146,8 @@ class _ConnectionPageState extends State<ConnectionPage> {
                     SizedBox(height: 10),
                     Text(
                       isConnected
-                          ? "Aplikasi anda telah terkoneksi dengan perangkat mikrokontroller\nMAC: $macAddress"
-                          : "Aplikasi anda belum terkoneksi dengan perangkat mikrokontroller",
+                          ? "Aplikasi telah terkoneksi dengan ESP32\nIP: $ipAddress"
+                          : "Aplikasi belum terkoneksi dengan ESP32",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
