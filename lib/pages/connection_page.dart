@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mqtt_client/mqtt_client.dart';
-import 'home_page.dart';
-import 'package:esp_control/backend/mqtt_client_handler.dart'; 
+import 'package:esp_control/backend/firebase_client_handler.dart';
 
 class ConnectionPage extends StatefulWidget {
   @override
@@ -11,47 +8,38 @@ class ConnectionPage extends StatefulWidget {
 }
 
 class _ConnectionPageState extends State<ConnectionPage> {
-  final TextEditingController _ipController = TextEditingController();
-  late MqttClientHandler _mqttTester;
+  late FirebaseClientHandler _firebaseHandler;
   String _connectionStatus = "TERPUTUS";
   bool _isConnecting = false;
 
   @override
   void initState() {
     super.initState();
-    _mqttTester = MqttClientHandler('');
-    _loadSavedBroker();
-  }
-
-  void _loadSavedBroker() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? savedBroker = prefs.getString('brokerAddress');
-    if (savedBroker != null) {
-      _ipController.text = savedBroker;
-    }
+    _firebaseHandler = FirebaseClientHandler();
+    _firebaseHandler.onConnectionStatus = (isConnected) {
+      setState(() {
+        _connectionStatus = isConnected ? "TERHUBUNG" : "TERPUTUS";
+      });
+    };
   }
 
   Future<void> _testConnection() async {
-    if (_ipController.text.isEmpty) return;
-
     setState(() {
       _isConnecting = true;
       _connectionStatus = "MENGHUBUNGKAN...";
     });
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('brokerAddress', _ipController.text);
-
-      _mqttTester.broker = _ipController.text;
-      await _mqttTester.connect();
-      
-      setState(() {
-        _connectionStatus = "TERHUBUNG";
-      });
-      
-      await Future.delayed(Duration(seconds: 1));
-      _mqttTester.disconnect();
+      final snapshot = await _firebaseHandler.databaseRef.child('test').once();
+      if (snapshot.snapshot.value != null) {
+        setState(() {
+          _connectionStatus = "TERHUBUNG";
+        });
+      } else {
+        setState(() {
+          _connectionStatus = "TERPUTUS";
+        });
+      }
     } catch (e) {
       setState(() {
         _connectionStatus = "TERPUTUS";
@@ -108,7 +96,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                     SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        "Sambungkan dengan alamat ESP anda",
+                        "Sambungkan dengan Firebase",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -118,24 +106,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
                     ),
                   ],
                 ),
-              ),
-              SizedBox(height: 20),
-              Text(
-                "Masukkan di bawah ini",
-                style: TextStyle(fontSize: 16, color: Colors.black87),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                controller: _ipController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Masukkan alamat IP ESP32',
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: () => _ipController.clear(),
-                  ),
-                ),
-                keyboardType: TextInputType.text,
               ),
               SizedBox(height: 20),
               ElevatedButton(
@@ -179,7 +149,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
   @override
   void dispose() {
-    _mqttTester.disconnect();
+    _firebaseHandler.disconnect();
     super.dispose();
   }
 }

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:esp_control/backend/mqtt_client_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:esp_control/backend/firebase_client_handler.dart';
 
 class HomePage extends StatefulWidget {
   final String brokerAddress;
@@ -15,7 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late MqttClientHandler mqttClientHandler;
+  late FirebaseClientHandler firebaseClientHandler;
   String temperature = '0°C';
   String humidity = '0%';
   String co2 = '0 ppm';
@@ -25,47 +24,36 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _loadBrokerAddress();
     initializeDateFormatting('id_ID', null);
-    mqttClientHandler = MqttClientHandler(widget.brokerAddress);
-    mqttClientHandler.onTemperatureUpdate = (value) {
+    firebaseClientHandler = FirebaseClientHandler();
+    firebaseClientHandler.onTemperatureUpdate = (value) {
       setState(() {
         temperature = '$value°C';
       });
     };
-    mqttClientHandler.onHumidityUpdate = (value) {
+    firebaseClientHandler.onHumidityUpdate = (value) {
       setState(() {
         humidity = '$value%';
       });
     };
-    mqttClientHandler.onCo2Update = (value) {
+    firebaseClientHandler.onCo2Update = (value) {
       setState(() {
         co2 = '$value ppm';
       });
     };
-    mqttClientHandler.onSmokeUpdate = (value) {
+    firebaseClientHandler.onSmokeUpdate = (value) {
       setState(() {
         smoke = '$value µg/m³';
       });
     };
-    mqttClientHandler.connect();
-  }
-
-  void _loadBrokerAddress() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? savedBroker = prefs.getString('brokerAddress');
-    if (savedBroker != null) {
-      mqttClientHandler = MqttClientHandler(savedBroker);
-      mqttClientHandler.connect();
-    }
   }
 
   @override
   void dispose() {
-    mqttClientHandler.disconnect();
+    firebaseClientHandler.disconnect();
     super.dispose();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     String currentDate =

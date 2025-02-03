@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "879705451691",
+    "project_id": "espcontrol-8de6a",
+    "storage_bucket": "espcontrol-8de6a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:879705451691:android:8d21ed87b9b0a93c50dbee",
+        "android_client_info": {
+          "package_name": "com.example.esp_control"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUVnyRn2c91-_B8m0ermFJ3oT4f6_3T4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
