@@ -1,12 +1,12 @@
 # MyHealth App
 
-MyHealth adalah aplikasi mobile berbasis Flutter yang membantu pengguna memantau kualitas udara di lingkungan sekitar menggunakan perangkat IoT (ESP32 + Sensor). Aplikasi ini menggunakan MQTT untuk menerima data suhu, kelembapan, karbon dioksida (CO₂), dan asap secara real-time dari Firebase Realtime Database sebagai broker MQTT.
+MyHealth adalah aplikasi mobile berbasis Flutter yang membantu pengguna memantau kualitas udara di lingkungan sekitar menggunakan perangkat IoT (ESP32 + Sensor). Aplikasi ini menggunakan MQTT untuk menerima data suhu, kelembapan, karbon dioksida (CO₂), dan asap secara real-time dari Firebase Realtime Database.
 
 ##
 🚀 Fitur
 
 - **📊 Monitoring Real-time**: Data dari ESP32 diperbarui langsung di aplikasi.
-- **📡 MQTT dengan Firebase**: Menggunakan Firebase Realtime Database sebagai broker MQTT.
+- **📡 Firebase**: Menggunakan Firebase Realtime Database.
 - **🏠 Home Page**: Menampilkan kondisi udara saat ini secara visual dan informatif.
 - **🔗 Connection Page**: Memungkinkan pengguna menghubungkan perangkat IoT.
 - **📜 History Page**: Menampilkan riwayat data selama satu minggu.
@@ -17,8 +17,7 @@ MyHealth adalah aplikasi mobile berbasis Flutter yang membantu pengguna memantau
 
 - **Flutter**: Framework utama untuk membangun aplikasi mobile.
 - **Dart**: Bahasa pemrograman yang digunakan dalam Flutter.
-- **Firebase Realtime Database**: Sebagai broker MQTT untuk komunikasi dengan ESP32.
-- **MQTT (mqtt_client)**: Protokol komunikasi yang digunakan untuk menerima data sensor.
+- **Firebase Realtime Database**: Untuk komunikasi dengan ESP32.
 - **flutter_svg**: Untuk menampilkan ikon SVG di aplikasi.
 
 ##
